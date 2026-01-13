@@ -17,6 +17,7 @@ import com.example.camerax_cp.ui.screens.VideoScreen
 import com.example.camerax_cp.ui.theme.Camerax_cpTheme
 import com.example.camerax_cp.viewModels.GalleryViewModel
 import com.example.camerax_cp.viewModels.ImageViewModel
+import com.example.camerax_cp.viewModels.VideoViewModel
 
 class MainActivity : BaseActivity() {
 
@@ -47,6 +48,7 @@ class MainActivity : BaseActivity() {
 
         val imageViewModel: ImageViewModel by viewModels()
         val galleryViewModel: GalleryViewModel by viewModels()
+        val videoViewModel: VideoViewModel by viewModels()
 
         enableEdgeToEdge()
         setContent {
@@ -64,6 +66,7 @@ class MainActivity : BaseActivity() {
                     )
 
                     Screen.Video -> VideoScreen(
+                        viewModel = videoViewModel,
                         onSwitchToPhoto = { currentScreen = Screen.Photo },
                         onOpenGallery = { currentScreen = Screen.Gallery }
                     )

@@ -1,13 +1,14 @@
 package com.example.camerax_cp.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.annotation.OptIn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
@@ -18,7 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.AspectRatioFrameLayout
+import androidx.media3.ui.PlayerView
 import coil3.compose.AsyncImage
 import com.example.camerax_cp.viewModels.GalleryViewModel
 import com.example.camerax_cp.viewModels.Resource
@@ -42,15 +50,24 @@ fun GalleryScreen(
 
     when (val item = selected) {
         null -> GalleryGrid(resources, onClick = { selected = it }, onBack)
-        is Resource.Image -> FullImage(item, onDelete = {
-            viewModel.delete(context, item.uri)
-            selected = null
-        })
-        is Resource.Video -> FullVideo(item, onDelete = {
-            viewModel.delete(context, item.uri)
-            selected = null
-        })
+        is Resource.Image -> FullImage(
+            resource = item,
+            onDelete = {
+                viewModel.delete(context, item.uri)
+                selected = null
+            },
+            onBack = { selected = null }
+        )
+        is Resource.Video -> FullVideo(
+            resource = item,
+            onDelete = {
+                viewModel.delete(context, item.uri)
+                selected = null
+            },
+            onBack = { selected = null }
+        )
     }
+
 }
 
 @Composable
@@ -61,8 +78,11 @@ private fun GalleryGrid(
 ) {
     Scaffold(
         topBar = {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, null)
+            IconButton(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                onClick = onBack) {
+                Icon(Icons.Default.ArrowBackIosNew, null)
             }
         }
     ) { padding ->
@@ -100,39 +120,93 @@ private fun GalleryGrid(
 private fun FullImage(
     resource: Resource.Image,
     onDelete: () -> Unit,
+    onBack: () -> Unit,
 ) {
-    Box(Modifier.fillMaxSize()) {
-        AsyncImage(
-            model = resource.uri,
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Fit
-        )
-        IconButton(
-            modifier = Modifier.align(Alignment.TopEnd),
-            onClick = onDelete
+    Scaffold { padding ->
+        Box(
+            Modifier
+                .fillMaxSize()
         ) {
-            Icon(Icons.Default.Delete, null, tint = Color.Red)
+            AsyncImage(
+                model = resource.uri,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Fit
+            )
+
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                onClick = onBack
+            ) {
+                Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back")
+            }
+
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                onClick = onDelete
+            ) {
+                Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.Red)
+            }
         }
     }
 }
-
+@OptIn(UnstableApi::class)
 @Composable
 private fun FullVideo(
     resource: Resource.Video,
     onDelete: () -> Unit,
+    onBack: () -> Unit,
 ) {
-    Box(Modifier.fillMaxSize()) {
-        Text(
-            text = "Video playback here",
-            modifier = Modifier.align(Alignment.Center),
-            color = Color.White
+    val context = LocalContext.current
+
+    val exoPlayer = remember(resource.uri) {
+        ExoPlayer.Builder(context).build().apply {
+            setMediaItem(MediaItem.fromUri(resource.uri))
+            prepare()
+            playWhenReady = true
+            repeatMode = Player.REPEAT_MODE_ONE
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = {
+                PlayerView(it).apply {
+                    player = exoPlayer
+                    useController = true
+                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                }
+            }
         )
+
         IconButton(
-            modifier = Modifier.align(Alignment.TopEnd),
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp),
+            onClick = onBack
+        ) {
+            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back")
+        }
+
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp),
             onClick = onDelete
         ) {
-            Icon(Icons.Default.Delete, null, tint = Color.Red)
+            Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.Red)
         }
     }
 }

@@ -26,7 +26,7 @@ class GalleryViewModel : ViewModel() {
 
     fun delete(context: Context, uri: Uri) {
         context.contentResolver.delete(uri, null)
-//        _resources.value = _resources.value.filterNot { it.uri == uri }
+        _resources.value = _resources.value.filterNot { it.uri == uri }
     }
 
     private fun queryResources(context: Context): List<Resource> {
@@ -39,7 +39,7 @@ class GalleryViewModel : ViewModel() {
                 MediaStore.Images.Media.DISPLAY_NAME,
             ),
             selection = "${MediaStore.Images.Media.RELATIVE_PATH} LIKE ?",
-            selectionArgs = arrayOf("%Pictures/CameraX-App/%"),
+            selectionArgs = arrayOf("%Pictures/Camerax_cp-App/%"),
         ) { cursor ->
             val idCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             val sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE)
@@ -70,7 +70,7 @@ class GalleryViewModel : ViewModel() {
                 MediaStore.Video.Media.DURATION,
             ),
             selection = "${MediaStore.Video.Media.RELATIVE_PATH} LIKE ?",
-            selectionArgs = arrayOf("%Movies/CameraX-App/%"),
+            selectionArgs = arrayOf("%Movies/Camerax_cp-App/%"),
         ) { cursor ->
             val idCol = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
             val sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)

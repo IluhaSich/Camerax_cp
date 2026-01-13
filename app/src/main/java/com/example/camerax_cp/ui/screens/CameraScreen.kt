@@ -1,11 +1,9 @@
-// ui/screens/CameraScreen.kt
 package com.example.camerax_cp.ui.screens
 
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
 import androidx.camera.viewfinder.compose.MutableCoordinateTransformer
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -30,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.camerax_cp.viewModels.ImageViewModel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -105,7 +102,7 @@ fun CameraScreen(
         IconButton(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(16.dp),
+                .padding(horizontal = 16.dp, vertical = 24.dp),
             onClick = {
                 cameraSelector =
                     if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA)

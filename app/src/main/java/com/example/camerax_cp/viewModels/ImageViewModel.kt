@@ -61,7 +61,7 @@ class ImageViewModel : ViewModel() {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-App")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Camerax_cp-App")
         }
 
         val outputOptions = ImageCapture.OutputFileOptions
