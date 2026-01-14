@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ImageViewModel : ViewModel() {
+class CameraViewModel : ViewModel() {
 
     private var cameraControl: CameraControl? = null
     private var surfaceMeteringPointFactory: SurfaceOrientedMeteringPointFactory? = null

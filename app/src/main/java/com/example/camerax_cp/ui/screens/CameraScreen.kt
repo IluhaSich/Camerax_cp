@@ -27,14 +27,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.camerax_cp.viewModels.ImageViewModel
+import com.example.camerax_cp.viewModels.CameraViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
 
 @Composable
 fun CameraScreen(
-    viewModel: ImageViewModel,
+    viewModel: CameraViewModel,
     onSwitchToVideo: () -> Unit,
     onOpenGallery: () -> Unit,
 ) {

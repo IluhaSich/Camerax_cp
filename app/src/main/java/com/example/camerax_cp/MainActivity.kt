@@ -16,7 +16,7 @@ import com.example.camerax_cp.ui.screens.GalleryScreen
 import com.example.camerax_cp.ui.screens.VideoScreen
 import com.example.camerax_cp.ui.theme.Camerax_cpTheme
 import com.example.camerax_cp.viewModels.GalleryViewModel
-import com.example.camerax_cp.viewModels.ImageViewModel
+import com.example.camerax_cp.viewModels.CameraViewModel
 import com.example.camerax_cp.viewModels.VideoViewModel
 
 class MainActivity : BaseActivity() {
@@ -46,7 +46,7 @@ class MainActivity : BaseActivity() {
             permissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
-        val imageViewModel: ImageViewModel by viewModels()
+        val cameraViewModel: CameraViewModel by viewModels()
         val galleryViewModel: GalleryViewModel by viewModels()
         val videoViewModel: VideoViewModel by viewModels()
 
@@ -60,7 +60,7 @@ class MainActivity : BaseActivity() {
 
                 when (currentScreen) {
                     Screen.Photo -> CameraScreen(
-                        viewModel = imageViewModel,
+                        viewModel = cameraViewModel,
                         onSwitchToVideo = { currentScreen = Screen.Video },
                         onOpenGallery = { currentScreen = Screen.Gallery }
                     )
