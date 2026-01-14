@@ -110,6 +110,10 @@ private fun GalleryGrid(
                             tint = Color.White
                         )
                     }
+                    Text(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        text = item.date,
+                    )
                 }
             }
         }

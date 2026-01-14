@@ -56,6 +56,7 @@ fun VideoScreen(
                 seconds++
             }
         }
+        seconds = 0
     }
 
     Box(
